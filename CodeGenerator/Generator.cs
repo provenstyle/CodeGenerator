@@ -17,13 +17,16 @@
             _keys         = keys;
         }
 
-        public void Generate()
+        public string[] Generate()
         {
+            var generatedFiles = new List<string>();
             foreach (var file in GetFiles(_templatePath))
-                Replace(file);
+                generatedFiles.Add(Replace(file));
+
+            return generatedFiles.ToArray();
         }
 
-        private void Replace(string filePath)
+        private string Replace(string filePath)
         {
             var lines = File.ReadAllLines(filePath);
             var updatedLines = new List<string>();
@@ -36,7 +39,7 @@
 
                 updatedLines.Add(updated);
             }
-            WriteFile(filePath, updatedLines.ToArray());
+            return WriteFile(filePath, updatedLines.ToArray());
         }
 
 
@@ -66,16 +69,18 @@
             return outputPath;
         }
 
-        private void WriteFile(string filePath, string[] lines)
+        private string WriteFile(string filePath, string[] lines)
         {
             var outputFile = OutputFile(filePath, _templatePath);
             var directoryName = Path.GetDirectoryName(outputFile);
-            if(string.IsNullOrEmpty(directoryName)) return;
+            if(string.IsNullOrEmpty(directoryName)) return string.Empty;
 
             Directory.CreateDirectory(directoryName);
             File.WriteAllLines(outputFile, lines);
 
             Console.WriteLine($"Created {outputFile}");
+
+            return outputFile;
         }
     }
 }
