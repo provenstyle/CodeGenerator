@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
 
     public class Generator
     {
@@ -10,11 +11,11 @@
         private readonly string _outputPath;
         private readonly Dictionary<string, string> _keys;
 
-        public Generator(string templateDir, string outputDir, Dictionary<string, string> keys)
+        public Generator(string templateDir, string outputDir, Dictionary<string, string> applicationKeys, Dictionary<string, string> entityKeys)
         {
             _templatePath = templateDir;
             _outputPath   = outputDir;
-            _keys         = keys;
+            _keys         = applicationKeys.Concat(entityKeys).ToDictionary(x => x.Key, x => x.Value);
         }
 
         public string[] Generate()
