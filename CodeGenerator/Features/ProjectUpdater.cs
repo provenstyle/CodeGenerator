@@ -1,4 +1,4 @@
-namespace CodeGenerator
+namespace CodeGenerator.Features
 {
     using System;
     using System.IO;
@@ -7,7 +7,7 @@ namespace CodeGenerator
 
     public class ProjectUpdater
     {
-        public void Update(string[] files, string[] csprojPaths)
+        public void Run(string[] files, string[] csprojPaths)
         {
             foreach (var csprojPath in csprojPaths)
             {

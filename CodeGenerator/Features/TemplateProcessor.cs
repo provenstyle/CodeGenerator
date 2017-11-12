@@ -1,34 +1,38 @@
-﻿namespace CodeGenerator
+﻿namespace CodeGenerator.Features
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
 
-    public class Generator
+    public class TemplateProcessor
     {
-        private readonly string _templatePath;
-        private readonly string _outputPath;
         private readonly Dictionary<string, string> _keys;
+        private readonly ApplicationConfig _config;
 
-        public Generator(string templateDir, string outputDir, Dictionary<string, string> applicationKeys, Dictionary<string, string> entityKeys)
+        public TemplateProcessor(ApplicationConfig config, Dictionary<string, string> keys)
         {
-            _templatePath = templateDir;
-            _outputPath   = outputDir;
-            _keys         = applicationKeys.Concat(entityKeys).ToDictionary(x => x.Key, x => x.Value);
+            _config       = config;
+            _keys         = keys;
         }
 
-        public string[] Generate()
+        public string[] Run()
         {
             var generatedFiles = new List<string>();
-            foreach (var file in GetFiles(_templatePath))
-                generatedFiles.Add(Replace(file));
+            foreach (var file in GetFiles(_config.TemplateFolder))
+            {
+                var replaced = Replace(file);
+                if(!string.IsNullOrEmpty(replaced))
+                    generatedFiles.Add(replaced);
+            }
 
             return generatedFiles.ToArray();
         }
 
         private string Replace(string filePath)
         {
+            if (File.Exists(OutputFile(filePath, _config.TemplateFolder)))
+                return null;
+
             var lines = File.ReadAllLines(filePath);
             var updatedLines = new List<string>();
 
@@ -63,7 +67,8 @@
         private string OutputFile(string path, string templateDirectory)
         {
             var outputFile = path.Substring(templateDirectory.Length + 1);
-            var outputPath = Path.Combine(_outputPath, outputFile);
+            var outputDirectory = new DirectoryInfo(_config.SolutionFolder).Parent;
+            var outputPath = Path.Combine(outputDirectory.FullName, outputFile);
             foreach (var key in _keys)
                 outputPath = outputPath.Replace(key.Key, key.Value);
 
@@ -72,7 +77,7 @@
 
         private string WriteFile(string filePath, string[] lines)
         {
-            var outputFile = OutputFile(filePath, _templatePath);
+            var outputFile = OutputFile(filePath, _config.TemplateFolder);
             var directoryName = Path.GetDirectoryName(outputFile);
             if(string.IsNullOrEmpty(directoryName)) return string.Empty;
 
