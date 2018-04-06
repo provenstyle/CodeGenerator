@@ -10,22 +10,34 @@
     {
         static void Main(string[] args)
         {
+            if (args.Length > 0 && args[0] == "init")
+            {
+                var name = (args.Length > 1)
+                               ? args[1]
+                               : "MyApp";
+                new Initializer().Init(name);
+                return;
+            }
+
             try
             {
                 Generator.Run(GetConfig());
-                Console.WriteLine("Generated Entities: Press any key to exit");
-                Console.ReadKey();
+                Console.WriteLine("Generated Entities");
             }
             catch(ConfigurationErrorsException ex)
             {
                 Console.WriteLine("Configuration Error:");
-                Console.Write($"    {ex.Message}");
+                Console.WriteLine($"    {ex.Message}");
             }
+
+            Console.WriteLine();
+            Console.WriteLine("Press any key to exit");
+            Console.ReadKey();
         }
 
         private static GeneratorConfig GetConfig()
         {
-            var configFile = "generatorConfig.json";
+            var configFile = GeneratorConfig.FileName;
             var path = Path.Combine(Environment.CurrentDirectory, configFile);
             if(!File.Exists(path))
                 throw new ConfigurationErrorsException($"{configFile} not found.");
@@ -35,7 +47,7 @@
 
             var templateDirectory = config.ApplicationConfig.TemplateFolder;
             if(!Directory.Exists(templateDirectory))
-                throw new ConfigurationErrorsException($"{configFile} not found.");
+                throw new ConfigurationErrorsException($"{templateDirectory} not found.");
 
             return config;
         }

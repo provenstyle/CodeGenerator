@@ -65,14 +65,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\ApplicationNames.cs" />
-    <Compile Include="Features\Generator.cs" />
-    <Compile Include="Features\GeneratorConfig.cs" />
-    <Compile Include="Features\TemplateProcessor.cs" />
+    <Compile Include="Features\Configuration\ApplicationNames.cs" />
+    <Compile Include="Features\Generation\Generator.cs" />
+    <Compile Include="Features\Configuration\GeneratorConfig.cs" />
+    <Compile Include="Features\Configuration\Initializer.cs" />
+    <Compile Include="Features\Generation\TemplateProcessor.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Features\ProjectUpdater.cs" />
+    <Compile Include="Features\Generation\ProjectUpdater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Features\StringExtensions.cs" />
+    <Compile Include="Features\Generation\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
