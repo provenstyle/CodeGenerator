@@ -2,7 +2,7 @@
 {
     public class ApplicationConfig
     {
-        public string SolutionFolder { get; set; }
+        public string SolutionFolder  { get; set; }
         public string TemplateFolder  { get; set; }
 
         public string ApplicationName { get; set; }

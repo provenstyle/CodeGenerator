@@ -1,0 +1,25 @@
+﻿{
+    "ApplicationConfig": {
+        "SolutionFolder":  "c:\\dev\\BibleTraining",
+        "TemplateFolder":  "c:\\dev\\BibleTraining\\templates",
+        "ApplicationName": "BibleTraining",
+        "DataDomain":      "IBibleTrainingDomain",
+        "ngApp":           "bt"
+    },
+    "Projects": [
+        "C:\\dev\\BibleTraining\\src\\BibleTraining\\BibleTraining.csproj",
+        "C:\\dev\\BibleTraining\\src\\BibleTraining.Api\\BibleTraining.Api.csproj",
+        "C:\\dev\\BibleTraining\\src\\BibleTraining.Migrations\\BibleTraining.Migrations.csproj",
+        "C:\\dev\\BibleTraining\\src\\BibleTraining.Web.UI\\BibleTraining.Web.UI.csproj",
+        "C:\\dev\\BibleTraining\test\\UnitTests\\UnitTests.csproj",
+        "C:\\dev\\BibleTraining\test\\IntegrationTests\\IntegrationTests.csproj"
+    ],
+    "EntityNames": [
+        "Address",
+        "AddressType",
+        "Email",
+        "EmailType",
+        "Phone",
+        "PhoneType"
+    ]
+}

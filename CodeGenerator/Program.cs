@@ -1,46 +1,44 @@
 ﻿namespace CodeGenerator
 {
     using System;
+    using System.Configuration;
+    using System.IO;
     using Features;
+    using Newtonsoft.Json;
 
     class Program
     {
         static void Main(string[] args)
         {
-            var applicationConfig = new ApplicationConfig
+            try
             {
-                SolutionFolder  = @"c:\dev\BibleTraining",
-                TemplateFolder  = @"c:\dev\BibleTraining\templates",
-                ApplicationName = "BibleTraining",
-                DataDomain      = "IBibleTrainingDomain",
-                ngApp           = "bt"
-            };
-
-            var projectsToUpdate = new []
+                Generator.Run(GetConfig());
+                Console.WriteLine("Generated Entities: Press any key to exit");
+                Console.ReadKey();
+            }
+            catch(ConfigurationErrorsException ex)
             {
-                @"C:\dev\BibleTraining\src\BibleTraining\BibleTraining.csproj",
-                @"C:\dev\BibleTraining\src\BibleTraining.Api\BibleTraining.Api.csproj",
-                @"C:\dev\BibleTraining\src\BibleTraining.Migrations\BibleTraining.Migrations.csproj",
-                @"C:\dev\BibleTraining\src\BibleTraining.Web.UI\BibleTraining.Web.UI.csproj",
-                @"C:\dev\BibleTraining\test\UnitTests\UnitTests.csproj",
-                @"C:\dev\BibleTraining\test\IntegrationTests\IntegrationTests.csproj"
-            };
+                Console.WriteLine("Configuration Error:");
+                Console.Write($"    {ex.Message}");
+            }
+        }
 
-            var entityNames = new[]
-            {
-                "Address",
-                "AddressType",
-                "Email",
-                "EmailType",
-                //"Person",
-                "Phone",
-                "PhoneType",
-            };
+        private static GeneratorConfig GetConfig()
+        {
+            var configFile = "generatorConfig.json";
+            var path = Path.Combine(Environment.CurrentDirectory, configFile);
+            if(!File.Exists(path))
+                throw new ConfigurationErrorsException($"{configFile} not found.");
 
-            Generator.Run(applicationConfig, entityNames, projectsToUpdate);
+            var json = File.ReadAllText(path);
+            var config = JsonConvert.DeserializeObject<GeneratorConfig>(json);
 
-            Console.WriteLine("Generated Entities: Press any key to exit");
-            Console.ReadKey();
+            var templateDirectory = config.ApplicationConfig.TemplateFolder;
+            if(!Directory.Exists(templateDirectory))
+                throw new ConfigurationErrorsException($"{configFile} not found.");
+
+            return config;
         }
     }
+
 }
