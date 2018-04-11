@@ -3,14 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using FubuCore;
+    using System.Linq;
 
     public class TemplateProcessor
     {
         private readonly Dictionary<string, string> _keys;
-        private readonly ApplicationConfig _config;
+        private readonly GeneratorConfig _config;
 
-        public TemplateProcessor(ApplicationConfig config, Dictionary<string, string> keys)
+        public TemplateProcessor(GeneratorConfig config, Dictionary<string, string> keys)
         {
             _config       = config;
             _keys         = keys;
@@ -19,7 +19,12 @@
         public string[] Run()
         {
             var generatedFiles = new List<string>();
-            foreach (var file in Files.GetFiles(_config.TemplateFolder))
+
+            var files = Files
+                .GetFiles(_config.TemplateFolder)
+                .Where(x => !x.Contains(GeneratorConfig.FileName));
+
+            foreach (var file in files)
             {
                 var replaced = Replace(file);
                 if(!string.IsNullOrEmpty(replaced))

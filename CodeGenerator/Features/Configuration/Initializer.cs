@@ -20,7 +20,6 @@
                     ApplicationConfig = new ApplicationConfig
                     {
                        ApplicationName = appName,
-                       TemplateFolder  = $"{workingDirectory}\\templates",
                        DataDomain      = $"I{appName}Domain",
                        ngApp           = appName.LowerFirstLetter()
                     },

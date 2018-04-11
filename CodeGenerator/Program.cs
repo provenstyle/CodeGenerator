@@ -2,9 +2,8 @@
 {
     using System;
     using System.Configuration;
-    using System.IO;
     using Features;
-    using Newtonsoft.Json;
+    using Features.Generation;
 
     class Program
     {
@@ -21,7 +20,7 @@
 
             try
             {
-                Generator.Run(GetConfig());
+                Generator.Run();
                 Console.WriteLine("Generated Entities");
             }
             catch(ConfigurationErrorsException ex)
@@ -35,22 +34,22 @@
             Console.ReadKey();
         }
 
-        private static GeneratorConfig GetConfig()
-        {
-            var configFile = GeneratorConfig.FileName;
-            var path = Path.Combine(Environment.CurrentDirectory, configFile);
-            if(!File.Exists(path))
-                throw new ConfigurationErrorsException($"{configFile} not found.");
+        //private static GeneratorConfig GetConfig()
+        //{
+        //    var configFile = GeneratorConfig.FileName;
+        //    var path = Path.Combine(Environment.CurrentDirectory, configFile);
+        //    if(!File.Exists(path))
+        //        throw new ConfigurationErrorsException($"{configFile} not found.");
 
-            var json = File.ReadAllText(path);
-            var config = JsonConvert.DeserializeObject<GeneratorConfig>(json);
+        //    var json = File.ReadAllText(path);
+        //    var config = JsonConvert.DeserializeObject<GeneratorConfig>(json);
 
-            var templateDirectory = config.ApplicationConfig.TemplateFolder;
-            if(!Directory.Exists(templateDirectory))
-                throw new ConfigurationErrorsException($"{templateDirectory} not found.");
+        //    var templateDirectory = config.ApplicationConfig.TemplateFolder;
+        //    if(!Directory.Exists(templateDirectory))
+        //        throw new ConfigurationErrorsException($"{templateDirectory} not found.");
 
-            return config;
-        }
+        //    return config;
+        //}
     }
 
 }

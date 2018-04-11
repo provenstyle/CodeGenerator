@@ -1,13 +1,38 @@
-﻿namespace CodeGenerator.Features
+﻿namespace CodeGenerator.Features.Generation
 {
+    using System;
     using System.Collections.Generic;
     using System.Data.Entity.Infrastructure.Pluralization;
+    using System.IO;
     using System.Linq;
-    using Generation;
+    using Newtonsoft.Json;
 
     public static class Generator
     {
-        public static void Run(GeneratorConfig config)
+        public static void Run()
+        {
+            var configFiles = Files
+                .GetFiles(Environment.CurrentDirectory, GeneratorConfig.FileName)
+                .ToArray();
+
+            foreach (var configFile in configFiles)
+            {
+                var templateDirectory = new DirectoryInfo(configFile).Parent;
+                if(templateDirectory == null) continue;
+
+                var config = GetConfig(configFile);
+                config.TemplateFolder = templateDirectory.FullName;
+                ProcessTemplates(config);
+            }
+        }
+
+        private static GeneratorConfig GetConfig(string path)
+        {
+            var json = File.ReadAllText(path);
+            return JsonConvert.DeserializeObject<GeneratorConfig>(json);
+        }
+
+        private static void ProcessTemplates(GeneratorConfig config)
         {
             var pluralization = new EnglishPluralizationService();
 
@@ -27,7 +52,7 @@
                     {"$entityPluralLowercase$", plural.LowerFirstLetter()}
                 };
 
-                var files = new TemplateProcessor(config.ApplicationConfig, keys).Run();
+                var files = new TemplateProcessor(config, keys).Run();
                 if(files.Any())
                     new ProjectUpdater().Run(files);
             }
