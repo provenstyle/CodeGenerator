@@ -2,6 +2,7 @@
 {
     public class ApplicationConfig
     {
+        public bool   Replace         { get; set; }
         public string SolutionFolder  { get; set; }
         public string TemplateFolder  { get; set; }
 

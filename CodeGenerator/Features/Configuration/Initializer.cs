@@ -25,15 +25,6 @@
                        DataDomain      = $"I{appName}Domain",
                        ngApp           = appName.LowerFirstLetter()
                     },
-                    Projects = new []
-                    {
-                        $"{workingDirectory}\\src\\{appName}\\{appName}.csproj",
-                        $"{workingDirectory}\\src\\{appName}.Api\\{appName}.Api.csproj",
-                        $"{workingDirectory}\\src\\{appName}.Migrations\\{appName}.Migrations.csproj",
-                        $"{workingDirectory}\\src\\{appName}.Web.UI\\{appName}.Web.UI.csproj",
-                        $"{workingDirectory}\\test\\UnitTests\\UnitTests.csproj",
-                        $"{workingDirectory}\\test\\IntegrationTests\\IntegrationTests.csproj"
-                    },
                     EntityNames = new []
                     {
                         "Foo",

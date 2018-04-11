@@ -1,4 +1,4 @@
-﻿namespace CodeGenerator.Features
+﻿namespace CodeGenerator.Features.Generation
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,7 @@
         public string[] Run()
         {
             var generatedFiles = new List<string>();
-            foreach (var file in GetFiles(_config.TemplateFolder))
+            foreach (var file in Files.GetFiles(_config.TemplateFolder))
             {
                 var replaced = Replace(file);
                 if(!string.IsNullOrEmpty(replaced))
@@ -30,7 +30,7 @@
 
         private string Replace(string filePath)
         {
-            if (File.Exists(OutputFile(filePath, _config.TemplateFolder)))
+            if (_config.Replace!= true && File.Exists(OutputFile(filePath, _config.TemplateFolder)))
                 return null;
 
             var lines = File.ReadAllLines(filePath);
@@ -45,23 +45,6 @@
                 updatedLines.Add(updated);
             }
             return WriteFile(filePath, updatedLines.ToArray());
-        }
-
-
-        private IEnumerable<string> GetFiles(string path)
-        {
-            var queue = new Queue<string>();
-            queue.Enqueue(path);
-            while (queue.Count > 0)
-            {
-                path = queue.Dequeue();
-                foreach (var subDir in Directory.GetDirectories(path))
-                    queue.Enqueue(subDir);
-
-                var files = Directory.GetFiles(path);
-                foreach (var t in files)
-                    yield return t;
-            }
         }
 
         private string OutputFile(string path, string templateDirectory)

@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Data.Entity.Infrastructure.Pluralization;
     using System.Linq;
+    using Generation;
 
     public static class Generator
     {
@@ -28,7 +29,7 @@
 
                 var files = new TemplateProcessor(config.ApplicationConfig, keys).Run();
                 if(files.Any())
-                    new ProjectUpdater().Run(files, config.Projects);
+                    new ProjectUpdater().Run(files);
             }
         }
     }

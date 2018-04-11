@@ -6,6 +6,5 @@ namespace CodeGenerator.Features
 
         public ApplicationConfig ApplicationConfig { get; set; }
         public string[]          EntityNames       { get; set; }
-        public string[]          Projects          { get; set; }
     }
 }

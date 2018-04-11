@@ -4,11 +4,23 @@ namespace CodeGenerator.Features
     using System.IO;
     using System.Linq;
     using FubuCsProjFile;
+    using Generation;
 
     public class ProjectUpdater
     {
-        public void Run(string[] files, string[] csprojPaths)
+        public void Run(string[] files)
         {
+            var csprojPaths = Files
+                .GetFiles(Environment.CurrentDirectory, "*.csproj")
+                .Where(csproj => files.Any(f =>
+                   {
+                       var directoryInfo = new FileInfo(csproj).Directory;
+                       return directoryInfo != null && f.Contains(
+                                  directoryInfo.FullName,
+                                  StringComparison.InvariantCultureIgnoreCase);
+                   }))
+                .ToArray();
+
             foreach (var csprojPath in csprojPaths)
             {
                 var directory = Path.GetDirectoryName(csprojPath) + "\\";

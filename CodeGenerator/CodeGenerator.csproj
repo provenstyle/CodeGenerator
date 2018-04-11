@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Features\Configuration\ApplicationNames.cs" />
+    <Compile Include="Features\Generation\Files.cs" />
     <Compile Include="Features\Generation\Generator.cs" />
     <Compile Include="Features\Configuration\GeneratorConfig.cs" />
     <Compile Include="Features\Configuration\Initializer.cs" />
