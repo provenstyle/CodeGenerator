@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using FubuCore;
 
     public class TemplateProcessor
     {
@@ -49,9 +50,9 @@
 
         private string OutputFile(string path, string templateDirectory)
         {
+            var templateParent = new DirectoryInfo(templateDirectory).Parent;
             var outputFile = path.Substring(templateDirectory.Length + 1);
-            var outputDirectory = new DirectoryInfo(_config.SolutionFolder).Parent;
-            var outputPath = Path.Combine(outputDirectory.FullName, outputFile);
+            var outputPath = Path.Combine(templateParent.FullName, outputFile);
             foreach (var key in _keys)
                 outputPath = outputPath.Replace(key.Key, key.Value);
 
